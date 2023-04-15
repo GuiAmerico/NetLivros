@@ -1,11 +1,13 @@
-package com.example.NetLivros.model.dto;
+package com.example.NetLivros.autor.model.dto;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
 
-import com.example.NetLivros.mapper.AutorMapper;
-import com.example.NetLivros.model.Autor;
+import com.example.NetLivros.autor.mapper.AutorMapper;
+import com.example.NetLivros.autor.model.Autor;
+import com.example.NetLivros.livro.model.dto.LivroDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Data 
 public class AutorDTO {
 
-	private Long id;
+	private UUID id;
 	@NotBlank
 	private String nome;
 	private List<LivroDTO> livrosDTO;

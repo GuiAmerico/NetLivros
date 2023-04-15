@@ -1,6 +1,10 @@
-package com.example.NetLivros.controller;
+package com.example.NetLivros.livro.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
+
+import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.NetLivros.model.dto.LivroDTO;
-import com.example.NetLivros.service.LivroService;
+import com.example.NetLivros.livro.enums.Genero;
+import com.example.NetLivros.livro.model.dto.LivroDTO;
+import com.example.NetLivros.livro.service.ILivroService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,15 +33,15 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/livros")
 public class LivroController {
 
-	private final LivroService service;
+	private final ILivroService service;
 
 	@GetMapping
 	@ApiOperation(value = "Obter lista de livros", response = LivroDTO.class)
 	public ResponseEntity<List<LivroDTO>> readAll(@RequestParam(required = false) String titulo,
-			@RequestParam(required = false) Integer numeroDePaginas, @RequestParam(required = false) Double preco,
-			@RequestParam(required = false) String genero, @RequestParam(required = false) String editora) {
+			@RequestParam(required = false) Integer numeroDePaginas, @RequestParam(required = false) BigDecimal preco,
+			@RequestParam(required = false) Genero genero, @RequestParam(required = false) String editora) {
 		return ResponseEntity.status(HttpStatus.OK)
-				.body(service.findAll(titulo, numeroDePaginas, preco, genero, editora));
+				.body(service.findAll(titulo, numeroDePaginas, preco, genero));
 	}
 	
 	@GetMapping("/preco")
@@ -48,26 +53,26 @@ public class LivroController {
 
 	@GetMapping("/{id}")
 	@ApiOperation(value = "Obter livro por id", response = LivroDTO.class)
-	public ResponseEntity<LivroDTO> readById(@PathVariable Long id) {
+	public ResponseEntity<LivroDTO> readById(@PathVariable UUID id) {
 		return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
 	}
 
 	@PostMapping("/{autorId}")
 	@ApiOperation(value = "Cria novo livro, relacionado a um autor", response = LivroDTO.class, notes = "Livro não pode ser nulo")
-	public ResponseEntity<LivroDTO> create(@PathVariable Long autorId, @RequestBody LivroDTO livroDTO) {
+	public ResponseEntity<LivroDTO> create(@PathVariable UUID autorId, @RequestBody @Valid LivroDTO livroDTO) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(autorId, livroDTO));
 	}
 
 	@PutMapping("/{id}")
 	@ApiOperation(value = "Atualiza livro existente", response = LivroDTO.class, notes = "Livro não pode ser nulo")
-	public ResponseEntity<LivroDTO> update(@PathVariable Long id, @RequestBody LivroDTO livroDTO) {
+	public ResponseEntity<LivroDTO> update(@PathVariable UUID id, @RequestBody @Valid LivroDTO livroDTO) {
 		return ResponseEntity.status(HttpStatus.OK).body(service.update(id, livroDTO));
 	}
 
 	@DeleteMapping("/{id}")
 	@ApiOperation("Deleta livro existente")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteById(@PathVariable Long id) {
+	public void deleteById(@PathVariable UUID id) {
 		service.deleteById(id);
 	}
 

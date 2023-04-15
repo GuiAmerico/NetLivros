@@ -1,22 +1,22 @@
-package com.example.NetLivros.mapper;
+package com.example.NetLivros.livro.mapper;
 
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
-import com.example.NetLivros.model.Autor;
-import com.example.NetLivros.model.Livro;
-import com.example.NetLivros.model.dto.AutorDTO;
-import com.example.NetLivros.model.dto.LivroDTO;
-import com.example.NetLivros.service.AutorService;
+import com.example.NetLivros.autor.model.Autor;
+import com.example.NetLivros.autor.model.dto.AutorDTO;
+import com.example.NetLivros.autor.service.IAutorService;
+import com.example.NetLivros.livro.model.Livro;
+import com.example.NetLivros.livro.model.dto.LivroDTO;
 
 @Component
 public class LivroMapper {
 
-	private final AutorService service;
+	private final IAutorService service;
 
-	public LivroMapper(AutorService service) {
+	public LivroMapper(IAutorService service) {
 		this.service = service;
 	}
 
@@ -36,7 +36,6 @@ public class LivroMapper {
 		livro.setNumeroDePaginas(livroDTO.getNumeroDePaginas());
 		livro.setPreco(livroDTO.getPreco());
 		livro.setGenero(livroDTO.getGenero());
-		livro.setEditora(livroDTO.getEditora());
 		AutorDTO autorDTO = service.findById(livroDTO.getAutorId());
 		Autor autor = new Autor();
 		BeanUtils.copyProperties(autorDTO, autor);

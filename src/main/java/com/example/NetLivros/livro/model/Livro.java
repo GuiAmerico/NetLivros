@@ -1,18 +1,24 @@
-package com.example.NetLivros.model;
+package com.example.NetLivros.livro.model;
+
+import java.math.BigDecimal;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.example.NetLivros.autor.model.Autor;
+import com.example.NetLivros.livro.enums.Genero;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,26 +29,24 @@ public class Livro {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private UUID id;
 	@Column(length = 50, nullable = false, unique = true)
 	private String titulo;
 	@Column(nullable = false)
 	private Integer numeroDePaginas;
 	@Column(nullable = false, precision = 5, scale = 2)
-	private Double preco;
+	private BigDecimal preco;
 	@Column(length = 50, nullable = false)
-	private String genero;
-	@Column(length = 50, nullable = false)
-	private String editora;
+	@Enumerated(EnumType.STRING)
+	private Genero genero;
 	@ManyToOne
 	private Autor autor;
 
-	public Livro(String titulo, Integer numeroDePaginas, Double preco, String genero, String editora) {
+	public Livro(String titulo, Integer numeroDePaginas, BigDecimal preco, Genero genero) {
 		this.titulo = titulo;
 		this.numeroDePaginas = numeroDePaginas;
 		this.preco = preco;
 		this.genero = genero;
-		this.editora = editora;
 	}
 
 }

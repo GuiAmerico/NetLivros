@@ -1,4 +1,4 @@
-package com.example.NetLivros.mapper;
+package com.example.NetLivros.autor.mapper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,10 +6,10 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
-import com.example.NetLivros.model.Autor;
-import com.example.NetLivros.model.Livro;
-import com.example.NetLivros.model.dto.AutorDTO;
-import com.example.NetLivros.model.dto.LivroDTO;
+import com.example.NetLivros.autor.model.Autor;
+import com.example.NetLivros.autor.model.dto.AutorDTO;
+import com.example.NetLivros.livro.model.Livro;
+import com.example.NetLivros.livro.model.dto.LivroDTO;
 
 @Component
 public class AutorMapper {

@@ -1,20 +1,26 @@
 package com.example.NetLivros.mock;
 
+import static com.example.NetLivros.mock.MocksAutor.AUTOR_1;
+import static com.example.NetLivros.mock.MocksAutor.AUTOR_2;
+import static com.example.NetLivros.mock.MocksAutor.AUTOR_3;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.NetLivros.model.Livro;
-import com.example.NetLivros.model.dto.LivroDTO;
+import com.example.NetLivros.livro.enums.Genero;
+import com.example.NetLivros.livro.model.Livro;
+import com.example.NetLivros.livro.model.dto.LivroDTO;
 
 public class MocksLivro {
 
-	public static final Livro LIVRO_1 = Livro.builder().titulo("Titulo 1").genero("Genero 1").editora("Editora 1")
-			.numeroDePaginas(100).preco(100.0).autor(MocksAutor.AUTOR_1).build();
-	public static final Livro LIVRO_2 = Livro.builder().titulo("Titulo 2").genero("Genero 2").editora("Editora 2")
-			.numeroDePaginas(200).preco(200.0).autor(MocksAutor.AUTOR_2).build();
-	public static final Livro LIVRO_3 = Livro.builder().titulo("Titulo 3").genero("Genero 3").editora("Editora 3")
-			.numeroDePaginas(300).preco(300.0).autor(MocksAutor.AUTOR_3).build();
-	public static Livro INVALID_LIVRO = Livro.builder().titulo("").genero("").editora("").numeroDePaginas(null)
+	public static final Livro LIVRO_1 = Livro.builder().titulo("Titulo 1").genero(Genero.AUTOAJUDA)
+			.numeroDePaginas(100).preco(new BigDecimal("100.0")).autor(AUTOR_1).build();
+	public static final Livro LIVRO_2 = Livro.builder().titulo("Titulo 2").genero(Genero.AVENTURA)
+			.numeroDePaginas(200).preco(new BigDecimal("200.0")).autor(AUTOR_2).build();
+	public static final Livro LIVRO_3 = Livro.builder().titulo("Titulo 3").genero(Genero.COMEDIA)
+			.numeroDePaginas(300).preco(new BigDecimal("300.0")).autor(AUTOR_3).build();
+	public static Livro INVALID_LIVRO = Livro.builder().titulo("").genero(null).numeroDePaginas(null)
 			.preco(null).autor(null).build();
 
 	public static List<Livro> LIVROS = new ArrayList<Livro>() {
@@ -25,13 +31,13 @@ public class MocksLivro {
 			add(LIVRO_3);
 		}
 	};
-	public static LivroDTO LIVRO_DTO_1 = LivroDTO.builder().titulo("Titulo 1").genero("Genero 1").editora("Editora 1")
-			.numeroDePaginas(100).preco(100.0).autorId(1L).build();
-	public static LivroDTO LIVRO_DTO_2 = LivroDTO.builder().titulo("Titulo 2").genero("Genero 2").editora("Editora 2")
-			.numeroDePaginas(200).preco(200.0).autorId(2L).build();
-	public static LivroDTO LIVRO_DTO_3 = LivroDTO.builder().titulo("Titulo 3").genero("Genero 3").editora("Editora 3")
-			.numeroDePaginas(300).preco(300.0).autorId(3L).build();
-	public static LivroDTO INVALID_LIVRO_DTO = LivroDTO.builder().titulo("").genero("").editora("")
+	public static LivroDTO LIVRO_DTO_1 = LivroDTO.builder().titulo("Titulo 1").genero(Genero.AUTOAJUDA)
+			.numeroDePaginas(100).preco(new BigDecimal("100.0")).autorId(AUTOR_1.getId()).build();
+	public static LivroDTO LIVRO_DTO_2 = LivroDTO.builder().titulo("Titulo 2").genero(Genero.AVENTURA)
+			.numeroDePaginas(200).preco(new BigDecimal("200.0")).autorId(AUTOR_2.getId()).build();
+	public static LivroDTO LIVRO_DTO_3 = LivroDTO.builder().titulo("Titulo 3").genero(Genero.COMEDIA)
+			.numeroDePaginas(300).preco(new BigDecimal("100.0")).autorId(AUTOR_3.getId()).build();
+	public static LivroDTO INVALID_LIVRO_DTO = LivroDTO.builder().titulo("").genero(null)
 			.numeroDePaginas(null).preco(null).autorId(null).build();
 	public static List<LivroDTO> LIVROS_DTO = new ArrayList<LivroDTO>() {
 		private static final long serialVersionUID = 1L;

@@ -1,20 +1,24 @@
-package com.example.NetLivros.service;
+package com.example.NetLivros.livro.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.stereotype.Service;
 
+import com.example.NetLivros.autor.model.Autor;
+import com.example.NetLivros.autor.repository.AutorRepository;
 import com.example.NetLivros.exception.ResourceAlreadyExistsException;
 import com.example.NetLivros.exception.ResourceNotFoundException;
-import com.example.NetLivros.mapper.LivroMapper;
-import com.example.NetLivros.model.Autor;
-import com.example.NetLivros.model.Livro;
-import com.example.NetLivros.model.dto.LivroDTO;
-import com.example.NetLivros.repository.AutorRepository;
-import com.example.NetLivros.repository.LivroRepository;
+import com.example.NetLivros.livro.enums.Genero;
+import com.example.NetLivros.livro.mapper.LivroMapper;
+import com.example.NetLivros.livro.model.Livro;
+import com.example.NetLivros.livro.model.dto.LivroDTO;
+import com.example.NetLivros.livro.repository.LivroRepository;
+import com.example.NetLivros.livro.service.ILivroService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -22,13 +26,14 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @RequiredArgsConstructor
 @Service
-public class LivroService {
+public class LivroServiceIMPL implements ILivroService{
 
 	private final AutorRepository autorRepository;
 	private final LivroRepository livroRepository;
 	private final LivroMapper mapper;
 
-	public LivroDTO save(Long autorId, LivroDTO livroDTO) {
+	@Override
+	public LivroDTO save(UUID autorId, LivroDTO livroDTO) {
 		if(livroRepository.existsByTitulo(livroDTO.getTitulo())) {
 			throw new ResourceAlreadyExistsException("Livro já cadastrado!");
 		}
@@ -46,9 +51,10 @@ public class LivroService {
 		return livroDTO;
 	}
 
-	public List<LivroDTO> findAll(String titulo, Integer numeroDePaginas, Double preco, String genero, String editora) {
+	@Override
+	public List<LivroDTO> findAll(String titulo, Integer numeroDePaginas, BigDecimal preco, Genero genero) {
 
-		Livro livro = new Livro(titulo, numeroDePaginas, preco, genero, editora);
+		Livro livro = new Livro(titulo, numeroDePaginas, preco, genero);
 		Example<Livro> example = Example.of(livro, ExampleMatcher.matching().withIgnoreCase().withIgnoreNullValues()
 				.withStringMatcher(StringMatcher.CONTAINING));
 		List<Livro> livros = livroRepository.findAll(example);
@@ -58,6 +64,7 @@ public class LivroService {
 		return livrosDTO;
 	}
 
+	@Override
 	public List<LivroDTO> findAllByPreco(Double min, Double max) {
 
 		List<Livro> livros = livroRepository.findByPrecoBetween(min,max);
@@ -68,7 +75,8 @@ public class LivroService {
 	}
 
 	
-	public LivroDTO findById(Long id) {
+	@Override
+	public LivroDTO findById(UUID id) {
 		Livro livro = livroRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Livro não encontrado!"));
 		LivroDTO livroDTO = mapper.toLivroDTO(livro);
 		log.info("Buscando Livro Por ID no Banco de Dados");
@@ -76,7 +84,8 @@ public class LivroService {
 		return livroDTO;
 	}
 
-	public LivroDTO update(Long id, LivroDTO livroDTO) {
+	@Override
+	public LivroDTO update(UUID id, LivroDTO livroDTO) {
 		Livro livro = livroRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Livro não encontrado!"));
 		livroDTO.setAutorId(livro.getAutor().getId());
 		livroDTO.setId(id);
@@ -89,7 +98,8 @@ public class LivroService {
 		return livroDTO;
 	}
 
-	public void deleteById(Long id) {
+	@Override
+	public void deleteById(UUID id) {
 		livroRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Livro não encontrado!"));
 		log.info("Deletando Livro Por ID no Banco de Dados");
 		livroRepository.deleteById(id);

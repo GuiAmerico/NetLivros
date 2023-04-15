@@ -1,9 +1,13 @@
-package com.example.NetLivros.model.dto;
+package com.example.NetLivros.livro.model.dto;
+
+import java.math.BigDecimal;
+import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.example.NetLivros.model.Livro;
+import com.example.NetLivros.livro.enums.Genero;
+import com.example.NetLivros.livro.model.Livro;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,19 +20,17 @@ import lombok.NoArgsConstructor;
 @Data
 public class LivroDTO {
 
-	private Long id;
+	private UUID id;
 	@NotBlank
 	private String titulo;
 	@NotNull
 	private Integer numeroDePaginas;
 	@NotNull
-	private Double preco;
+	private BigDecimal preco;
 	@NotBlank
-	private String genero;
-	@NotBlank
-	private String editora;
+	private Genero genero;
 	@NotNull
-	private Long autorId;
+	private UUID autorId;
 
 	public LivroDTO(Livro livro) {
 		this.id = livro.getId();
@@ -36,7 +38,6 @@ public class LivroDTO {
 		this.numeroDePaginas = livro.getNumeroDePaginas();
 		this.preco = livro.getPreco();
 		this.genero = livro.getGenero();
-		this.editora = livro.getEditora();
 		this.autorId = livro.getAutor().getId();
 	}
 

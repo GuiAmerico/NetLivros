@@ -3,8 +3,8 @@ package com.example.NetLivros.mock;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.NetLivros.model.Autor;
-import com.example.NetLivros.model.dto.AutorDTO;
+import com.example.NetLivros.autor.model.Autor;
+import com.example.NetLivros.autor.model.dto.AutorDTO;
 
 public class MocksAutor {
 

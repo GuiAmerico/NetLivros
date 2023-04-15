@@ -1,6 +1,7 @@
-package com.example.NetLivros.controller;
+package com.example.NetLivros.autor.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -16,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.NetLivros.model.dto.AutorDTO;
-import com.example.NetLivros.service.AutorService;
+import com.example.NetLivros.autor.model.dto.AutorDTO;
+import com.example.NetLivros.autor.service.IAutorService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/autores")
 public class AutorController {
 
-	private final AutorService service;
+	private final IAutorService service;
 
 	@GetMapping
 	@ApiOperation(value = "Obter lista de autores", response = AutorDTO.class)
@@ -39,7 +40,7 @@ public class AutorController {
 
 	@GetMapping("/{id}")
 	@ApiOperation(value = "Obter autor por id", response = AutorDTO.class)
-	public ResponseEntity<AutorDTO> readById(@PathVariable Long id) {
+	public ResponseEntity<AutorDTO> readById(@PathVariable UUID id) {
 		return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
 	}
 
@@ -51,14 +52,14 @@ public class AutorController {
 
 	@PutMapping("/{id}")
 	@ApiOperation(value = "Atualiza autor existente", response = AutorDTO.class, notes = "Autor não pode ser nulo")
-	public ResponseEntity<AutorDTO> update(@PathVariable Long id, @RequestBody @Valid AutorDTO autor) {
+	public ResponseEntity<AutorDTO> update(@PathVariable UUID id, @RequestBody @Valid AutorDTO autor) {
 		return ResponseEntity.status(HttpStatus.OK).body(service.update(id, autor));
 	}
 
 	@DeleteMapping("/{id}")
 	@ApiOperation("Deleta autor existente")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteById(@PathVariable Long id) {
+	public void deleteById(@PathVariable UUID id) {
 		service.deleteById(id);
 	}
 }

@@ -12,12 +12,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,18 +26,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.example.NetLivros.autor.mapper.AutorMapper;
+import com.example.NetLivros.autor.model.Autor;
+import com.example.NetLivros.autor.model.dto.AutorDTO;
+import com.example.NetLivros.autor.repository.AutorRepository;
+import com.example.NetLivros.autor.service.impl.AutorServiceIMPL;
 import com.example.NetLivros.exception.ResourceNotFoundException;
 import com.example.NetLivros.exception.ResourceNotValidException;
-import com.example.NetLivros.mapper.AutorMapper;
-import com.example.NetLivros.model.Autor;
-import com.example.NetLivros.model.dto.AutorDTO;
-import com.example.NetLivros.repository.AutorRepository;
 
 @ExtendWith(MockitoExtension.class)
 class AutorServiceTest {
 
 	@InjectMocks
-	private AutorService service;
+	private AutorServiceIMPL service;
 	@Mock
 	private AutorRepository repository;
 	@Mock
@@ -86,10 +87,10 @@ class AutorServiceTest {
 	@DisplayName("Deveria buscar um autor sem lançar exceção")
 	@Test
 	void testFindById() {
-		when(repository.findById(anyLong())).thenReturn(Optional.of(AUTOR_1));
+		when(repository.findById(any(UUID.class))).thenReturn(Optional.of(AUTOR_1));
 		when(mapper.toAutorDTO(any())).thenReturn(AUTOR_DTO_1);
 		
-		AutorDTO autorDTO = service.findById(1L);
+		AutorDTO autorDTO = service.findById(UUID.randomUUID());
 		
 		assertThat(autorDTO).isEqualTo(AUTOR_DTO_1);
 
@@ -100,20 +101,20 @@ class AutorServiceTest {
 	@DisplayName("Deveria lançar exceção ao buscar um autor inexistente ")
 	@Test
 	void testFindById_AutorNotFound() {
-		when(repository.findById(anyLong())).thenThrow(ResourceNotFoundException.class);
+		when(repository.findById(any(UUID.class))).thenThrow(ResourceNotFoundException.class);
 
-		assertThatThrownBy(() -> service.findById(1L)).isInstanceOf(ResourceNotFoundException.class);
+		assertThatThrownBy(() -> service.findById(UUID.randomUUID())).isInstanceOf(ResourceNotFoundException.class);
 	}
 
 	@DisplayName("Deveria salvar autor sem lançar exceção")
 	@Test
 	void testUpdate() {
-		when(repository.findById(anyLong())).thenReturn(Optional.of(AUTOR_1));
+		when(repository.findById(any(UUID.class))).thenReturn(Optional.of(AUTOR_1));
 		when(repository.save(any(Autor.class))).thenReturn(AUTOR_1);
 		when(mapper.toAutor(any())).thenReturn(AUTOR_1);
 		
 		AUTOR_DTO_1.setNome("Updated Autor");
-		AutorDTO updatedAutor = service.update(1L,AUTOR_DTO_1);
+		AutorDTO updatedAutor = service.update(UUID.randomUUID(),AUTOR_DTO_1);
 
 		assertThat(updatedAutor).isEqualTo(AUTOR_DTO_1);
 		assertThat(updatedAutor.getNome()).isEqualTo("Updated Autor");
@@ -122,18 +123,18 @@ class AutorServiceTest {
 	@DisplayName("Deveria deletar autor sem lançar exceção")
 	@Test
 	void testDeleteById() {
-		when(repository.findById(anyLong())).thenReturn(Optional.of(AUTOR_1));
+		when(repository.findById(any(UUID.class))).thenReturn(Optional.of(AUTOR_1));
 		
-		assertDoesNotThrow(() -> service.deleteById(1L));
+		assertDoesNotThrow(() -> service.deleteById(UUID.randomUUID()));
 
 	}
 
 	@DisplayName("Deveria lançar exceção ao tentar deletar autor inexistente")
 	@Test
 	void testDeleteById_AutorNotFound() {
-		when(repository.findById(anyLong())).thenThrow(ResourceNotFoundException.class);
+		when(repository.findById(any(UUID.class))).thenThrow(ResourceNotFoundException.class);
 		
-		assertThatThrownBy(() -> service.deleteById(1L)).isInstanceOf(ResourceNotFoundException.class);
+		assertThatThrownBy(() -> service.deleteById(UUID.randomUUID())).isInstanceOf(ResourceNotFoundException.class);
 		
 	}
 }
