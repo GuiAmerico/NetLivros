@@ -6,41 +6,41 @@ import java.time.temporal.ChronoUnit;
 
 import org.springframework.stereotype.Component;
 
-import com.example.NetLivros.livro.model.Exemplar;
-import com.example.NetLivros.livro.model.enums.CondicaoDevolucao;
-import com.example.NetLivros.livro.utils.chain.condicao.CondicaoBom;
-import com.example.NetLivros.livro.utils.chain.condicao.CondicaoChain;
-import com.example.NetLivros.livro.utils.chain.condicao.CondicaoPessimo;
-import com.example.NetLivros.livro.utils.chain.condicao.CondicaoRuim;
-import com.example.NetLivros.livro.utils.chain.juros.JurosChain;
-import com.example.NetLivros.livro.utils.chain.juros.JurosMaisDeVinteQuatroHoras;
-import com.example.NetLivros.livro.utils.chain.juros.JurosUmaHora;
-import com.example.NetLivros.livro.utils.chain.juros.JurosVinteQuatroHoras;
+import com.example.NetLivros.livro.model.Copy;
+import com.example.NetLivros.livro.model.enums.DevolutionCondition;
+import com.example.NetLivros.livro.utils.chain.condicao.BadCondition;
+import com.example.NetLivros.livro.utils.chain.condicao.ConditionChain;
+import com.example.NetLivros.livro.utils.chain.condicao.GoodCondition;
+import com.example.NetLivros.livro.utils.chain.condicao.VeryBadCondition;
+import com.example.NetLivros.livro.utils.chain.juros.InterestChain;
+import com.example.NetLivros.livro.utils.chain.juros.InterestOneHour;
+import com.example.NetLivros.livro.utils.chain.juros.InterestOverTwentyFourHours;
+import com.example.NetLivros.livro.utils.chain.juros.InterestTwentyFourHours;
 
 @Component
 public class Utils {
 
-	public BigDecimal verificarAluguel(Exemplar livro) {
-		return verificarAluguel(livro.getDataAluguel(), livro.getDataDevolucao(), livro.getDataQueDeveriaSerDevolvido(),
-				livro.getCondicaoDevolucao());
+	public BigDecimal checkRent(Copy copy) {
+		return checkRent(copy.getDateRent(), copy.getDevolutionDate(), copy.getDateThatShouldBeReturned(),
+				copy.getDevolutionCondition());
 	}
 
-	private BigDecimal verificarAluguel(LocalDateTime dataAluguel, LocalDateTime dataDevolução,
-			LocalDateTime dataQueDeveriaSerDevolvido, CondicaoDevolucao condicaoDevolucao) {
+	private BigDecimal checkRent(LocalDateTime dateRent, LocalDateTime devolutionDate,
+			LocalDateTime dateThatShouldBeReturned, DevolutionCondition devolutionCondition) {
 
-		long minutos = dataQueDeveriaSerDevolvido.until(dataDevolução, ChronoUnit.MINUTES);
-		condicaoDevolucao = avaliacao(condicaoDevolucao);
+		long minutes = dateThatShouldBeReturned.until(dateRent, ChronoUnit.MINUTES);
+		devolutionCondition = avaliation(devolutionCondition);
 
-		JurosChain chain = new JurosUmaHora(new JurosVinteQuatroHoras(new JurosMaisDeVinteQuatroHoras(null)));
+		InterestChain chain = new InterestOneHour(new InterestTwentyFourHours(new InterestOverTwentyFourHours(null)));
 
-		return chain.calcularJuros(minutos, condicaoDevolucao, BigDecimal.ZERO);
+		return chain.calculateInterest(minutes, devolutionCondition, BigDecimal.ZERO);
 
 	}
 
-	private CondicaoDevolucao avaliacao(CondicaoDevolucao condicaoDevolucao) {
+	private DevolutionCondition avaliation(DevolutionCondition devolutionCondition) {
 		double random = Math.random();
-		CondicaoChain chain = new CondicaoRuim(condicaoDevolucao, new CondicaoPessimo(new CondicaoBom(null)));
-		return chain.avaliacao(random, condicaoDevolucao);
+		ConditionChain chain = new BadCondition(devolutionCondition, new VeryBadCondition(new GoodCondition(null)));
+		return chain.avaliation(random, devolutionCondition);
 	}
 
 }

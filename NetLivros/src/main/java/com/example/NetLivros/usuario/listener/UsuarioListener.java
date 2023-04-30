@@ -23,7 +23,7 @@ public class UsuarioListener implements Observer {
 	private String email;
 
 	@JsonIgnore
-	private String livroDeInteresse;
+	private String BookOfInterest;
 	@JsonIgnore
 	private EmailServiceIMPL emailService = new EmailServiceIMPL(new JavaMailSenderImpl());
 

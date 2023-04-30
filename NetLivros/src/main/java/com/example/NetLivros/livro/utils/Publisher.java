@@ -19,16 +19,16 @@ public class Publisher {
 		this.observers.remove(observer);
 	}
 
-	public void notificarObservers(String tituloLivro) {
+	public void notifyObservers(String bookTitle) {
 
 		observers.stream().filter(observer -> {
 			if (observer instanceof UsuarioListener) {
-				if (((UsuarioListener) observer).getLivroDeInteresse().equals(tituloLivro)) {
+				if (((UsuarioListener) observer).getBookOfInterest().equals(bookTitle)) {
 					return true;
 				}
 			}
 			return false;
-		}).forEach(observer -> observer.update(tituloLivro));
+		}).forEach(observer -> observer.update(bookTitle));
 	}
 
 }
