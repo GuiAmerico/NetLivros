@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.NetLivros.livro.enums.Genero;
@@ -28,9 +27,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@Api("Api de Livros")
-@RestController
+@Api("Api de Livros") 
 @RequestMapping("/api/livros")
+@RestController
 public class LivroController {
 
 	private final ILivroService service;
@@ -40,15 +39,14 @@ public class LivroController {
 	public ResponseEntity<List<LivroDTO>> readAll(@RequestParam(required = false) String titulo,
 			@RequestParam(required = false) Integer numeroDePaginas, @RequestParam(required = false) BigDecimal preco,
 			@RequestParam(required = false) Genero genero, @RequestParam(required = false) String editora) {
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(service.findAll(titulo, numeroDePaginas, preco, genero));
+		return ResponseEntity.status(HttpStatus.OK).body(service.findAll(titulo, numeroDePaginas, preco, genero));
 	}
-	
+
 	@GetMapping("/preco")
 	@ApiOperation(value = "Obter lista de livros por preco", response = LivroDTO.class)
-	public ResponseEntity<List<LivroDTO>> readAllByPreco(@RequestParam(defaultValue = "0", required = false) Double min, @RequestParam Double max) {
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(service.findAllByPreco(min,max));
+	public ResponseEntity<List<LivroDTO>> readAllByPreco(@RequestParam(defaultValue = "0", required = false) Double min,
+			@RequestParam Double max) {
+		return ResponseEntity.status(HttpStatus.OK).body(service.findAllByPreco(min, max));
 	}
 
 	@GetMapping("/{id}")
@@ -60,6 +58,7 @@ public class LivroController {
 	@PostMapping("/{autorId}")
 	@ApiOperation(value = "Cria novo livro, relacionado a um autor", response = LivroDTO.class, notes = "Livro não pode ser nulo")
 	public ResponseEntity<LivroDTO> create(@PathVariable UUID autorId, @RequestBody @Valid LivroDTO livroDTO) {
+		System.out.println(livroDTO);
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(autorId, livroDTO));
 	}
 
@@ -71,7 +70,6 @@ public class LivroController {
 
 	@DeleteMapping("/{id}")
 	@ApiOperation("Deleta livro existente")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteById(@PathVariable UUID id) {
 		service.deleteById(id);
 	}

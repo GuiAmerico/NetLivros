@@ -1,0 +1,33 @@
+package com.example.NetLivros.livro.utils.chain.juros;
+
+import java.math.BigDecimal;
+
+import com.example.NetLivros.livro.model.enums.CondicaoDevolucao;
+
+public class JurosUmaHora implements JurosChain {
+	private JurosChain proximo;
+	private double jurosDouble;
+
+	public static final int UMA_HORA = 60;
+	public static final double VALOR_ADICIONAL_MA_CONDICAO = 3.00;
+
+	public JurosUmaHora(JurosChain proximo) {
+		this.proximo = proximo;
+	}
+
+	@Override
+	public BigDecimal calcularJuros(long minutos, CondicaoDevolucao condicaoDevolucao, BigDecimal juros) {
+		if (minutos <= UMA_HORA) {
+			return juros;
+		}
+		if (CondicaoDevolucao.RUIM.equals(condicaoDevolucao)) {
+			this.jurosDouble += VALOR_ADICIONAL_MA_CONDICAO;
+		}
+		if (CondicaoDevolucao.PESSIMO.equals(condicaoDevolucao)) {
+			this.jurosDouble += VALOR_ADICIONAL_MA_CONDICAO * 2;
+		}
+
+		return proximo.calcularJuros(minutos, condicaoDevolucao, BigDecimal.valueOf(jurosDouble));
+	}
+
+}

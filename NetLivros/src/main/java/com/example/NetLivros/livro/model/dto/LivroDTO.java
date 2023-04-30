@@ -3,6 +3,8 @@ package com.example.NetLivros.livro.model.dto;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -27,11 +29,10 @@ public class LivroDTO {
 	private Integer numeroDePaginas;
 	@NotNull
 	private BigDecimal preco;
-	@NotBlank
+	@Enumerated(EnumType.STRING)
 	private Genero genero;
 	@NotNull
 	private String autor;
-	
 
 	public LivroDTO(Livro livro) {
 		this.id = livro.getId();
@@ -42,5 +43,4 @@ public class LivroDTO {
 		this.autor = livro.getAutor().getNome();
 	}
 
-	
 }

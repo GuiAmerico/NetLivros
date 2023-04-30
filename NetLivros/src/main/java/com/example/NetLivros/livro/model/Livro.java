@@ -4,18 +4,22 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.example.NetLivros.autor.model.Autor;
 import com.example.NetLivros.livro.enums.Genero;
-import com.example.NetLivros.livro.model.enums.Situacao;
+import com.example.NetLivros.livro.model.enums.SituacaoLivro;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,7 +34,7 @@ import lombok.NoArgsConstructor;
 public class Livro {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
 	private UUID id;
 	@Column(length = 50, nullable = false, unique = true)
 	private String titulo;
@@ -43,17 +47,23 @@ public class Livro {
 	private Genero genero;
 	@Column
 	@Enumerated(EnumType.STRING)
-	private Situacao situacao;
+	private SituacaoLivro situacao;
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "livro_exemplares", joinColumns = @JoinColumn(name = "livro_id", referencedColumnName = "id"))
 	private List<Exemplar> exemplares;
 	@ManyToOne
 	private Autor autor;
-	
 
 	public Livro(String titulo, Integer numeroDePaginas, BigDecimal preco, Genero genero) {
 		this.titulo = titulo;
 		this.numeroDePaginas = numeroDePaginas;
 		this.preco = preco;
 		this.genero = genero;
+	}
+
+	public void addExemplar(Exemplar exemplar) {
+		this.exemplares.add(exemplar);
 	}
 
 }

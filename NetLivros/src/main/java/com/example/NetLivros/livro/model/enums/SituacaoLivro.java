@@ -1,5 +1,6 @@
 package com.example.NetLivros.livro.model.enums;
 
-public enum Situacao {
+public enum SituacaoLivro
+{
 	PUBLICADO, PENDENTE, RECUSADO;
 }

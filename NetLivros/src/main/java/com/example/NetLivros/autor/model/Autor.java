@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class Autor {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
 	private UUID id;
 	@Column(length = 50, nullable = false, unique = true)
 	private String nome;

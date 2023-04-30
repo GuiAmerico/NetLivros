@@ -1,18 +1,33 @@
 spring:
   application:
-    name: msautores
+    name: msnetlivros
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: vousuaveagencia@gmail.com
+    password: tmireetgdzlopaks
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            
+            
+
   sql:
     init:
       mode: always
       platform: postgres
   datasource:
-    url: postgresql://localhost:5432/netlivros?createDatabaseIfNotExist=true
+    url: jdbc:postgresql://localhost:5432/netlivros?createDatabaseIfNotExist=true
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: root
@@ -20,11 +35,11 @@ spring:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
 server:
-  port: 0
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-      instance:
-        instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  port: 8080
+  
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka
+#      instance:
+#        instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}

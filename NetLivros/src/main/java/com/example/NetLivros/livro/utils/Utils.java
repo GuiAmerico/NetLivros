@@ -8,49 +8,39 @@ import org.springframework.stereotype.Component;
 
 import com.example.NetLivros.livro.model.Exemplar;
 import com.example.NetLivros.livro.model.enums.CondicaoDevolucao;
+import com.example.NetLivros.livro.utils.chain.condicao.CondicaoBom;
+import com.example.NetLivros.livro.utils.chain.condicao.CondicaoChain;
+import com.example.NetLivros.livro.utils.chain.condicao.CondicaoPessimo;
+import com.example.NetLivros.livro.utils.chain.condicao.CondicaoRuim;
+import com.example.NetLivros.livro.utils.chain.juros.JurosChain;
+import com.example.NetLivros.livro.utils.chain.juros.JurosMaisDeVinteQuatroHoras;
+import com.example.NetLivros.livro.utils.chain.juros.JurosUmaHora;
+import com.example.NetLivros.livro.utils.chain.juros.JurosVinteQuatroHoras;
 
 @Component
 public class Utils {
 
-	public static final int UMA_HORA = 60;
-	public static final int VINTE_QUATRO_HORAS = 24 * UMA_HORA;
-	public static final double VALOR_ADICIONAL_POR_HORA = 2.00;
-	public static final double VALOR_ADICIONAL_MA_CONDICAO = 3.00;
-	public static final double VALOR_DIA = 20.00;
-
 	public BigDecimal verificarAluguel(Exemplar livro) {
-		return verificarAluguel(livro.getDataAluguel(), livro.getDataDevolução(), livro.getCondicaoDevolucao());
+		return verificarAluguel(livro.getDataAluguel(), livro.getDataDevolucao(), livro.getDataQueDeveriaSerDevolvido(),
+				livro.getCondicaoDevolucao());
 	}
 
 	private BigDecimal verificarAluguel(LocalDateTime dataAluguel, LocalDateTime dataDevolução,
-			CondicaoDevolucao condicaoDevolucao) {
+			LocalDateTime dataQueDeveriaSerDevolvido, CondicaoDevolucao condicaoDevolucao) {
 
-		long minutos = dataAluguel.until(dataDevolução, ChronoUnit.MINUTES);
-		BigDecimal juros = BigDecimal.ZERO;
-		if (minutos <= UMA_HORA) {
-			return juros;
-		}
-		if (minutos <= VINTE_QUATRO_HORAS) {
-			int horas = (int) (minutos / UMA_HORA);
-			for (int i = 0; i < horas; i++) {
-				juros.add(BigDecimal.valueOf(VALOR_ADICIONAL_POR_HORA));
-			}
-			return juros;
-		}
-		int dias = (int) (minutos / VINTE_QUATRO_HORAS);
-		for (int i = 0; i < dias; i++) {
-			juros.add(BigDecimal.valueOf(VALOR_DIA));
-		}
+		long minutos = dataQueDeveriaSerDevolvido.until(dataDevolução, ChronoUnit.MINUTES);
+		condicaoDevolucao = avaliacao(condicaoDevolucao);
 
-		if (condicaoDevolucao.equals(CondicaoDevolucao.RUIM)) {
-			juros.add(BigDecimal.valueOf(VALOR_ADICIONAL_MA_CONDICAO));
-		}
-		if (condicaoDevolucao.equals(CondicaoDevolucao.PESSIMO)) {
-			juros.add(BigDecimal.valueOf(VALOR_ADICIONAL_MA_CONDICAO * 2));
-		}
-		
+		JurosChain chain = new JurosUmaHora(new JurosVinteQuatroHoras(new JurosMaisDeVinteQuatroHoras(null)));
 
-		return juros;
+		return chain.calcularJuros(minutos, condicaoDevolucao, BigDecimal.ZERO);
+
+	}
+
+	private CondicaoDevolucao avaliacao(CondicaoDevolucao condicaoDevolucao) {
+		double random = Math.random();
+		CondicaoChain chain = new CondicaoRuim(condicaoDevolucao, new CondicaoPessimo(new CondicaoBom(null)));
+		return chain.avaliacao(random, condicaoDevolucao);
 	}
 
 }
