@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotBlank;
 
 import org.springframework.hateoas.RepresentationModel;
 
@@ -35,6 +36,7 @@ public class CopyDTO extends RepresentationModel<CopyDTO> {
 
 	private UUID id;
 
+	@NotBlank
 	private String bookTitle;
 
 	private LocalDateTime dateRent;

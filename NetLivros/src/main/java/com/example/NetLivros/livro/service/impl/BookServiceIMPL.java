@@ -34,11 +34,11 @@ public class BookServiceIMPL implements IBookService {
 	@Override
 	public BookDTO save(UUID authorId, BookDTO bookDTO) {
 		if (bookRepository.existsByTitle(bookDTO.getTitle())) {
-			throw new ResourceAlreadyExistsException("Book já cadastrado!");
+			throw new ResourceAlreadyExistsException("Book already registered!");
 		}
 
 		Author author = authorRepository.findById(authorId)
-				.orElseThrow(() -> new ResourceNotFoundException("Author não Encontrado"));
+				.orElseThrow(() -> new ResourceNotFoundException("Author not found!"));
 		bookDTO.setAuthor(author.getName());
 		Book book = mapper.toBook(bookDTO);
 		book.setAuthor(author);
@@ -46,7 +46,7 @@ public class BookServiceIMPL implements IBookService {
 		bookRepository.save(book);
 
 		bookDTO = mapper.toBookDTO(book);
-		log.info("Salvando Book no Banco de Dados");
+		log.info("Saving Book in the Database");
 
 		return bookDTO;
 	}
@@ -59,7 +59,7 @@ public class BookServiceIMPL implements IBookService {
 				.withStringMatcher(StringMatcher.CONTAINING));
 		List<Book> books = bookRepository.findAll(example);
 		List<BookDTO> booksDTO = mapper.toBookDTOList(books);
-		log.info("Lendo Books do Banco de Dados");
+		log.info("Fetching Books from the Database");
 
 		return booksDTO;
 	}
@@ -67,9 +67,9 @@ public class BookServiceIMPL implements IBookService {
 	@Override
 	public BookDTO findById(UUID id) {
 		Book book = bookRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Book não encontrado!"));
+				.orElseThrow(() -> new ResourceNotFoundException("Book not found!"));
 		BookDTO bookDTO = mapper.toBookDTO(book);
-		log.info("Buscando Book Por ID no Banco de Dados");
+		log.info("Searching Book By ID in Database");
 
 		return bookDTO;
 	}
@@ -77,13 +77,13 @@ public class BookServiceIMPL implements IBookService {
 	@Override
 	public BookDTO update(UUID id, BookDTO bookDTO) {
 		Book book = bookRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Book não encontrado!"));
+				.orElseThrow(() -> new ResourceNotFoundException("Book not found!"));
 		bookDTO.setAuthor(book.getAuthor().getName());
 		bookDTO.setId(id);
 		book = mapper.toBook(bookDTO);
 		bookRepository.save(book);
 
-		log.info("Atualizando Book Por ID no Banco de Dados");
+		log.info("Updating Book By ID in Database");
 		bookDTO = mapper.toBookDTO(book);
 
 		return bookDTO;
@@ -91,8 +91,8 @@ public class BookServiceIMPL implements IBookService {
 
 	@Override
 	public void deleteById(UUID id) {
-		bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book não encontrado!"));
-		log.info("Deletando Book Por ID no Banco de Dados");
+		bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book not found!"));
+		log.info("Deleting Book By ID in Database");
 		bookRepository.deleteById(id);
 	}
 

@@ -3,6 +3,8 @@ package com.example.NetLivros.mock;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.assertj.core.util.Arrays;
+
 import com.example.NetLivros.livro.enums.Genrer;
 import com.example.NetLivros.livro.model.Book;
 import com.example.NetLivros.livro.model.dto.BookDTO;
@@ -10,7 +12,7 @@ import com.example.NetLivros.livro.model.dto.BookDTO;
 public class MocksBooks {
 
 	public static final Book BOOK_1 = Book.builder().title("Title 1").genrer(Genrer.ADVENTURE).numberOfPages(100)
-			.author(MocksAuthor.AUTHOR_1).build();
+			.author(MocksAuthor.AUTHOR_1).copies(new ArrayList<>()).build();
 	public static final Book BOOK_2 = Book.builder().title("Title 2").genrer(Genrer.COMEDY).numberOfPages(200)
 			.author(MocksAuthor.AUTHOR_2).build();
 	public static final Book BOOK_3 = Book.builder().title("Title 3").genrer(Genrer.ROMANCE).numberOfPages(300)

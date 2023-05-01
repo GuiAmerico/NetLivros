@@ -1,4 +1,4 @@
-package com.example.NetLivros.usuario.listener;
+package com.example.NetLivros.user.listener;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UsuarioListener implements Observer {
+public class UserListener implements Observer {
 
 	private String CPF;
 	private String email;

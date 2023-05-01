@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Api("Books API")
-@RequestMapping("/api/books")
+@RequestMapping("/api/v1/books")
 @RestController
 public class BookController {
 
@@ -48,11 +48,10 @@ public class BookController {
 		return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
 	}
 
-	@PostMapping("/{autorId}")
+	@PostMapping("/{authorId}")
 	@ApiOperation(value = "Create new book, related to an author", response = BookDTO.class, notes = "Book cannot be null")
-	public ResponseEntity<BookDTO> save(@PathVariable UUID authorId, @RequestBody @Valid BookDTO livroDTO) {
-		System.out.println(livroDTO);
-		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(authorId, livroDTO));
+	public ResponseEntity<BookDTO> save(@PathVariable UUID authorId, @RequestBody @Valid BookDTO bookDTO) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(authorId, bookDTO));
 	}
 
 	@PutMapping("/{id}")

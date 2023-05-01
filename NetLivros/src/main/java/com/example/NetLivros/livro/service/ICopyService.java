@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.example.NetLivros.livro.model.dto.CopyDTO;
-import com.example.NetLivros.usuario.listener.UsuarioListener;
+import com.example.NetLivros.user.listener.UserListener;
 
 public interface ICopyService {
 
@@ -16,11 +16,11 @@ public interface ICopyService {
 
 	void saveAllCopies(List<CopyDTO> copies);
 
-	Object rentCopyByTitle(String title, UsuarioListener usuarioListener);
+	Object rentCopyByTitle(String title, UserListener userListener);
 
 	Integer getAvailableQuantity(String title);
 
-	String returnCopy(UUID id, UsuarioListener usuarioListener);
+	String returnCopy(UUID id, UserListener userListener);
 
 	void deleteAllCopiesByTitle(String titulo);
 

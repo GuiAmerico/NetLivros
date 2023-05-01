@@ -25,7 +25,7 @@ import com.example.NetLivros.livro.repository.CopyRepository;
 import com.example.NetLivros.livro.service.ICopyService;
 import com.example.NetLivros.livro.utils.Publisher;
 import com.example.NetLivros.livro.utils.Utils;
-import com.example.NetLivros.usuario.listener.UsuarioListener;
+import com.example.NetLivros.user.listener.UserListener;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,22 +52,22 @@ public class CopyServiceIMPL implements ICopyService {
 	public CopyDTO save(CopyDTO copyDTO) {
 
 		Book book = bookRepository.findByTitle(copyDTO.getBookTitle())
-				.orElseThrow(() -> new ResourceNotFoundException(""));
+				.orElseThrow(() -> new ResourceNotFoundException("Book not found!"));
 
 		Copy copy = copyMapper.toCopy(copyDTO);
 		copyRepository.save(copy);
 		book.addCopy(copy);
 
-		log.info("Salvando copy no banco de dados");
+		log.info("Saving copy in the database");
 		bookRepository.save(book);
 		return copyMapper.toCopyDTO(copy);
 	}
 
 	@Override
-	public void saveAllCopies(List<CopyDTO> copyesDTO) {
+	public void saveAllCopies(List<CopyDTO> copiesDTO) {
 
-		List<Copy> copyes = copyMapper.toCopyList(copyesDTO);
-		copyes.stream().map(copy -> {
+		List<Copy> copies = copyMapper.toCopyList(copiesDTO);
+		copies.stream().map(copy -> {
 			Book book = bookRepository.findByTitle(copy.getBookTitle())
 					.orElseThrow(() -> new ResourceNotFoundException("Book not found with that title!"));
 			book.addCopy(copy);
@@ -75,31 +75,31 @@ public class CopyServiceIMPL implements ICopyService {
 			return bookRepository.save(book);
 
 		});
-		log.info("Salvando copyes no banco de dados");
+		log.info("Saving copies in the database");
 
 	}
 
 	@Override
-	public Object rentCopyByTitle(String title, UsuarioListener usuarioListener) {
+	public Object rentCopyByTitle(String title, UserListener userListener) {
 		if (!copyRepository.existsByBookTitle(title)) {
 			throw new ResourceNotFoundException("Book not found with that title!");
 		}
 		if (getAvailableQuantity(title) < 1) {
-			usuarioListener.setBookOfInterest(title);
-			publisher.add(usuarioListener);
+			userListener.setBookOfInterest(title);
+			publisher.add(userListener);
 			return """
-					Copy indisponível,
+					Cópia indisponível,
 					notificaremos quando houver disponibilidade,
-					veja outros books ou espere até que alguém devolva!
+					veja outros livros ou espere até que alguém devolva!
 					""";
 		}
 		Copy copy = copyRepository.findCopyByTitle(title).get();
 		copy.setDateRent(LocalDateTime.now(clock));
 
 		copy.setDateThatShouldBeReturned(LocalDateTime.now(clock).plusDays(7));
-		copy.setCPFOfWhoRented(usuarioListener.getCPF());
+		copy.setCPFOfWhoRented(userListener.getCPF());
 
-		log.info("renting copy");
+		log.info("Renting copy");
 		copyRepository.save(copy);
 		return copy;
 
@@ -126,24 +126,26 @@ public class CopyServiceIMPL implements ICopyService {
 	}
 
 	@Override
-	public String returnCopy(UUID id, UsuarioListener usuarioListener) {
+	public String returnCopy(UUID id, UserListener userListener) {
 
 		Copy copy = copyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book not found!"));
 
-		if (!copy.getCPFOfWhoRented().equals(usuarioListener.getCPF())) {
+		System.out.println(copy.getCPFOfWhoRented());
+		System.out.println(userListener.getCPF());
+		if (!copy.getCPFOfWhoRented().equals(userListener.getCPF())) {
 			throw new UserNotValidException("This user's CPF does not match the user who rented this copy!");
 		}
 		if (isNull(copy.getDateRent())) {
 			throw new ResourceUnavailableException(
 					"It is not possible to return a book that has already been returned!");
 		}
-		copy.setCPFOfWhoRented(null);
-		copy.setDateRent(null);
 
 		copy.setDevolutionDate(LocalDateTime.now(clock));
-		System.out.println(copy);
-		BigDecimal aluguel = utils.checkRent(copy).setScale(2);
+		BigDecimal rent = utils.checkRent(copy).setScale(2);
+		
 
+		copy.setCPFOfWhoRented(null);
+		copy.setDateRent(null);
 		copy.setDateThatShouldBeReturned(null);
 		copy.setDevolutionDate(null);
 
@@ -151,10 +153,10 @@ public class CopyServiceIMPL implements ICopyService {
 		copyRepository.save(copy);
 
 		publisher.notifyObservers(copy.getBookTitle());
-		publisher.remove(usuarioListener);
+		publisher.remove(userListener);
 		return String.format(
-				"The value of your rent, taking into account the condition of the book and the return date, is: R$%s",
-				aluguel);
+				"O valor do seu aluguel, tendo em conta o estado da livro e a data de devolução, é: R$%s",
+				rent);
 
 	}
 

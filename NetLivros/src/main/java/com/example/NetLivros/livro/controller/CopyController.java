@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.NetLivros.livro.model.dto.CopyDTO;
 import com.example.NetLivros.livro.service.ICopyService;
-import com.example.NetLivros.usuario.listener.UsuarioListener;
+import com.example.NetLivros.user.listener.UserListener;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -58,16 +58,16 @@ public class CopyController {
 	@ApiOperation(value = "Rent copy by title", response = Object.class)
 	@PostMapping("/rent/{title}")
 	public ResponseEntity<Object> rentCopyByTitle(@PathVariable String title,
-			@RequestBody UsuarioListener usuarioListener) {
-		System.out.println(usuarioListener);
-		return ResponseEntity.status(HttpStatus.OK).body(service.rentCopyByTitle(title, usuarioListener));
+			@RequestBody UserListener userListener) {
+		System.out.println(userListener);
+		return ResponseEntity.status(HttpStatus.OK).body(service.rentCopyByTitle(title, userListener));
 	}
 
 	@ApiOperation(value = "Return  copy", response = String.class)
 	@PostMapping("/return/{id}")
-	public ResponseEntity<String> returnCopy(@PathVariable UUID id, UsuarioListener usuarioListener) {
-		System.out.println(id);
-		return ResponseEntity.status(HttpStatus.OK).body(service.returnCopy(id, usuarioListener));
+	public ResponseEntity<String> returnCopy(@PathVariable UUID id, @RequestBody UserListener userListener) {
+		System.out.println(userListener);
+		return ResponseEntity.status(HttpStatus.OK).body(service.returnCopy(id, userListener));
 	}
 
 	@ApiOperation(value = "Delete copyes by title")

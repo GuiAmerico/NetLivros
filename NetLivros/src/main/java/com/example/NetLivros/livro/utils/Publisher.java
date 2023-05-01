@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.NetLivros.usuario.listener.UsuarioListener;
+import com.example.NetLivros.user.listener.UserListener;
 
 @Service
 public class Publisher {
@@ -22,8 +22,8 @@ public class Publisher {
 	public void notifyObservers(String bookTitle) {
 
 		observers.stream().filter(observer -> {
-			if (observer instanceof UsuarioListener) {
-				if (((UsuarioListener) observer).getBookOfInterest().equals(bookTitle)) {
+			if (observer instanceof UserListener) {
+				if (((UserListener) observer).getBookOfInterest().equals(bookTitle)) {
 					return true;
 				}
 			}

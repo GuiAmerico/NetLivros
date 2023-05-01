@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Api(value = "Authors API")
 @RestController
-@RequestMapping("/api/authors")
+@RequestMapping("/api/v1/authors")
 public class AuthorController {
 
 	private final IAuthorService service;

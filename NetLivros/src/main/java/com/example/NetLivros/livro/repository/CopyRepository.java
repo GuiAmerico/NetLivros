@@ -16,7 +16,7 @@ public interface CopyRepository extends JpaRepository<Copy, UUID> {
 
 	boolean existsByBookTitle(String titulo);
 	
-	@Query(value="SELECT COUNT(*) FROM copy c WHERE c.book_title =:title AND e.date_rent IS null", nativeQuery = true)
+	@Query(value="SELECT COUNT(*) FROM copy c WHERE c.book_title =:title AND c.date_rent IS null", nativeQuery = true)
 	Integer getAvailableQuantity(@Param("title") String title);
 
 

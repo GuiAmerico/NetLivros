@@ -27,7 +27,6 @@ public class Utils {
 
 	private BigDecimal checkRent(LocalDateTime dateRent, LocalDateTime devolutionDate,
 			LocalDateTime dateThatShouldBeReturned, DevolutionCondition devolutionCondition) {
-
 		long minutes = dateThatShouldBeReturned.until(dateRent, ChronoUnit.MINUTES);
 		devolutionCondition = avaliation(devolutionCondition);
 

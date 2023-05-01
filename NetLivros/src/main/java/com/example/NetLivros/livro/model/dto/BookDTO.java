@@ -28,7 +28,6 @@ public class BookDTO {
 	private Integer numberOfPages;
 	@Enumerated(EnumType.STRING)
 	private Genrer genrer;
-	@NotNull
 	private String author;
 
 	public BookDTO(Book book) {
