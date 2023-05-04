@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.assertj.core.util.Arrays;
 
-import com.example.NetLivros.livro.enums.Genrer;
-import com.example.NetLivros.livro.model.Book;
-import com.example.NetLivros.livro.model.dto.BookDTO;
+import com.example.NetLivros.book.model.Book;
+import com.example.NetLivros.book.model.dto.BookDTO;
+import com.example.NetLivros.book.model.enums.Genrer;
 
 public class MocksBooks {
 

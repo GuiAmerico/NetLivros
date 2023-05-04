@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.example.NetLivros.author.mapper.AuthorMapper;
 import com.example.NetLivros.author.model.Author;
-import com.example.NetLivros.livro.model.dto.BookDTO;
+import com.example.NetLivros.book.model.dto.BookDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -28,14 +28,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.NetLivros.author.repository.AuthorRepository;
+import com.example.NetLivros.book.mapper.BookMapper;
+import com.example.NetLivros.book.model.Book;
+import com.example.NetLivros.book.model.dto.BookDTO;
+import com.example.NetLivros.book.model.enums.Genrer;
+import com.example.NetLivros.book.repository.BookRepository;
+import com.example.NetLivros.book.service.impl.BookServiceIMPL;
 import com.example.NetLivros.exception.ResourceNotFoundException;
 import com.example.NetLivros.exception.ResourceNotValidException;
-import com.example.NetLivros.livro.enums.Genrer;
-import com.example.NetLivros.livro.mapper.BookMapper;
-import com.example.NetLivros.livro.model.Book;
-import com.example.NetLivros.livro.model.dto.BookDTO;
-import com.example.NetLivros.livro.repository.BookRepository;
-import com.example.NetLivros.livro.service.impl.BookServiceIMPL;
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceTest {

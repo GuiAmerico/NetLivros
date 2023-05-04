@@ -5,9 +5,9 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import com.example.NetLivros.livro.utils.Observer;
-import com.example.NetLivros.service.EmailService;
-import com.example.NetLivros.service.impl.EmailServiceIMPL;
+import com.example.NetLivros.book.utils.Observer;
+import com.example.NetLivros.email.service.EmailService;
+import com.example.NetLivros.email.service.impl.EmailServiceIMPL;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;

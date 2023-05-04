@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.NetLivros.livro.model.Copy;
-import com.example.NetLivros.livro.model.dto.CopyDTO;
-import com.example.NetLivros.livro.model.enums.DevolutionCondition;
+import com.example.NetLivros.book.model.Copy;
+import com.example.NetLivros.book.model.dto.CopyDTO;
+import com.example.NetLivros.book.model.enums.DevolutionCondition;
 
 public class MocksCopy {
 

@@ -10,7 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.example.NetLivros.livro.model.Book;
+import com.example.NetLivros.book.model.Book;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

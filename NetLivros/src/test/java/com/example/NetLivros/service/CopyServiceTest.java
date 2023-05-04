@@ -27,20 +27,21 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.example.NetLivros.book.mapper.CopyMapper;
+import com.example.NetLivros.book.model.Copy;
+import com.example.NetLivros.book.model.Message;
+import com.example.NetLivros.book.model.dto.CopyDTO;
+import com.example.NetLivros.book.repository.BookRepository;
+import com.example.NetLivros.book.repository.CopyRepository;
+import com.example.NetLivros.book.service.impl.CopyServiceIMPL;
+import com.example.NetLivros.book.utils.Publisher;
+import com.example.NetLivros.book.utils.Utils;
+import com.example.NetLivros.email.service.impl.EmailServiceIMPL;
 import com.example.NetLivros.exception.ResourceNotFoundException;
 import com.example.NetLivros.exception.ResourceUnavailableException;
 import com.example.NetLivros.exception.UserNotValidException;
-import com.example.NetLivros.livro.mapper.CopyMapper;
-import com.example.NetLivros.livro.model.Copy;
-import com.example.NetLivros.livro.model.dto.CopyDTO;
-import com.example.NetLivros.livro.repository.BookRepository;
-import com.example.NetLivros.livro.repository.CopyRepository;
-import com.example.NetLivros.livro.service.impl.CopyServiceIMPL;
-import com.example.NetLivros.livro.utils.Publisher;
-import com.example.NetLivros.livro.utils.Utils;
 import com.example.NetLivros.mock.MocksBooks;
 import com.example.NetLivros.mock.MocksCopy;
-import com.example.NetLivros.service.impl.EmailServiceIMPL;
 import com.example.NetLivros.user.listener.UserListener;
 
 @ExtendWith(MockitoExtension.class)
@@ -190,23 +191,11 @@ class CopyServiceTest {
 		when(utils.checkRent(Mockito.any())).thenReturn(new BigDecimal("20.00"));
 
 		userListener.setCPF("05491217069");
-		String rent = copyService.returnCopy(id, userListener);
-		assertThat(rent).isEqualTo(
+		Message rent = copyService.returnCopy(id, userListener);
+		assertThat(rent.getMessage()).isEqualTo(
 				"O valor do seu aluguel, tendo em conta o estado da livro e a data de devolução, é: R$20.00");
 	}
-//	@Test
-//	void testReturnCopy_() {
-//		UUID id = UUID.randomUUID();
-//		when(copyRepository.findById(id)).thenReturn(Optional.of(COPY_1));
-//		when(clock.getZone()).thenReturn(NOW.getZone());
-//		when(clock.instant()).thenReturn(NOW.toInstant());
-//		when(utils.checkRent(Mockito.any())).thenReturn(new BigDecimal("0.0"));
-//		
-//		usuarioListener.setCPF("05491217069");
-//		String rent = copyService.returnCopy(id, usuarioListener);
-//		assertThat(rent).isEqualTo(
-//				"O valor do seu aluguel, tendo em conta o estado da livro e a data de devolução, é: R$0.00");
-//	}
+
 
 	@Test
 	void testDeleteAllCopiesByTitle() {

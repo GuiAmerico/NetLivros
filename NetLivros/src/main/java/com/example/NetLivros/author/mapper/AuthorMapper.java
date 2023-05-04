@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 import com.example.NetLivros.author.model.Author;
 import com.example.NetLivros.author.model.dto.AuthorDTO;
-import com.example.NetLivros.livro.model.Book;
-import com.example.NetLivros.livro.model.dto.BookDTO;
+import com.example.NetLivros.book.model.Book;
+import com.example.NetLivros.book.model.dto.BookDTO;
 
 @Component
 public class AuthorMapper {
